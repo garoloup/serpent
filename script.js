@@ -21,7 +21,7 @@ window.onload = function()
 
     ctx = canvas.getContext('2d');
 
-    snakee = new snake([[6,4],[5,4],[4,4]]);
+    snakee = new snake([[6,4],[5,4],[4,4]], "right");
 
     refreshCanvas();
     }
@@ -47,9 +47,11 @@ window.onload = function()
         ctx.fillRect(x,y,blocksize,blocksize);
     }
 
-    function snake(body)
+    function snake(body, direction)
     {
         this.body=body;
+        this.direction = "right";
+
         this.draw = function() {
             ctx.save();
             ctx.fillStyle = "#ff0000";
@@ -62,10 +64,74 @@ window.onload = function()
 
         this.move = function() {
             var nextPos = this.body[0].slice();
-            nextPos[0] += 1;
+            //nextPos[0] += 1;
+
+            switch(this.direction)
+                {
+                    case "left":
+                        nextPos[0] -= 1;
+                        break;
+                    case "right":
+                        nextPos[0] += 1;
+                        break;
+                    case "up":
+                        nextPos[1] -= 1;
+                        break;
+                    case "down":
+                        nextPos[1] += 1;
+                        break;
+                    default:
+                        throw("invalid direction");
+                }
+
             this.body.unshift(nextPos);
             this.body.pop();
         };
+
+        this.setDirection = function(newDir)
+        {
+            var allowedDir;
+            switch(this.direction)
+                {
+                    case "left":
+                    case "right":
+                        allowedDir = ["up","down"];
+                        break;
+                    case "up":
+                    case "down":
+                        allowedDir = ["right","left"];
+                        break;
+                    default:
+                        throw("invalid direction");
+              }
+            if (allowedDir.indexOf(newDir) > -1)
+                {
+                    this.direction = newDir;
+                }
+        }
+    }
+
+    document.onkeydown = function handleKeyDown(e)
+    {
+        var newDir = "";
+        switch(e.keyCode)
+            {
+                case 37:
+                    newDir = "left";
+                    break;
+                case 38:
+                    newDir = "up";
+                    break;
+                case 39:
+                    newDir = "right";
+                    break;
+                case 40:
+                    newDir = "down";
+                    break;
+                default:
+                    return;
+            }
+        snakee.setDirection(newDir);
     }
 
 }
