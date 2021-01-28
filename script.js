@@ -32,6 +32,8 @@ window.onload = function()
 
         ctx.fillStyle = "#ff0000";
         ctx.clearRect(0,0,canvas.width, canvas.height);
+
+        snakee.move();
         snakee.draw();
 
         setTimeout(refreshCanvas,delay);
@@ -56,7 +58,14 @@ window.onload = function()
 
             }
             ctx.restore();
-        }
+        };
+
+        this.move = function() {
+            var nextPos = this.body[0].slice();
+            nextPos[0] += 1;
+            this.body.unshift(nextPos);
+            this.body.pop();
+        };
     }
 
 }
