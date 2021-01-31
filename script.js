@@ -3,13 +3,13 @@ window.onload = function()
     var canvas;
     var canvasWidth=900;
     var canvasHeight=600;
+    var blocksize = 30;
+    var widthInBlocks = canvasWidth / blocksize;
+    var heightInBlocks = canvasHeight / blocksize;
     var ctx;
     var delay = 100; // en ms
-    var xCoord=0;
-    var yCoord=0;
     var snakee;
     var applee;
-    var blocksize = 30;
 
     init();
 
@@ -30,17 +30,23 @@ window.onload = function()
     }
 
     function refreshCanvas() {
-        xCoord+=5;
-        yCoord+=5;
-
-        ctx.fillStyle = "#ff0000";
-        ctx.clearRect(0,0,canvas.width, canvas.height);
 
         snakee.move();
-        snakee.draw();
-        applee.draw();
+        if (snakee.checkCollision()) {
+            console.log("Game Over");
 
-        setTimeout(refreshCanvas,delay);
+        }
+        else {
+            ctx.fillStyle = "#ff0000";
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+
+            snakee.draw();
+            applee.draw();
+
+            setTimeout(refreshCanvas,delay);
+        }
+
+
     }
 
     function drawBlock(ctx, pos)
@@ -113,6 +119,32 @@ window.onload = function()
                     this.direction = newDir;
                 }
         };
+
+        this.checkCollision = function() {
+            var checkWall = false;
+            var checkBody = false;
+            var head = this.body[0];
+            var rest = this.body.slice(1);
+            var headX = head[0];
+            var headY = head[1];
+            var minX = 0;
+            var minY = 0;
+            var maxX = widthInBlocks - 1;
+            var maxY = heightInBlocks - 1;
+            var outsideWallX = headX < minX || headX > maxX;
+            var outsideWallY = headY < minY || headY > maxY;
+
+            checkWall = outsideWallX || outsideWallY ;
+
+            for(var i=0; i < rest.length;i++) {
+                if (headX === rest[i][0] && headY === rest[i][1])
+                    {
+                        checkBody = true;
+                    }
+            }
+
+            return( checkWall || checkBody);
+        }
     }
 
     function apple(pos) {
