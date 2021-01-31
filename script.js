@@ -8,6 +8,7 @@ window.onload = function()
     var xCoord=0;
     var yCoord=0;
     var snakee;
+    var applee;
     var blocksize = 30;
 
     init();
@@ -23,6 +24,8 @@ window.onload = function()
 
     snakee = new snake([[6,4],[5,4],[4,4]], "right");
 
+    applee = new apple([10,10]);
+
     refreshCanvas();
     }
 
@@ -35,6 +38,7 @@ window.onload = function()
 
         snakee.move();
         snakee.draw();
+        applee.draw();
 
         setTimeout(refreshCanvas,delay);
     }
@@ -108,7 +112,23 @@ window.onload = function()
                 {
                     this.direction = newDir;
                 }
-        }
+        };
+    }
+
+    function apple(pos) {
+        this.position = pos;
+
+        this.draw = function() {
+            ctx.save();
+            ctx.fillStyle = "#33cc33";
+            var radius = blocksize / 2;
+            var x = blocksize* this.position[0] + radius;
+            var y = blocksize* this.position[1] + radius;
+            ctx.arc(x,y,radius,0,Math.PI*2, true);
+            ctx.fill();
+
+            ctx.restore();
+        };
     }
 
     document.onkeydown = function handleKeyDown(e)
