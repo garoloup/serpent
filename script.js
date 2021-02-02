@@ -18,7 +18,10 @@ window.onload = function()
     canvas = document.createElement('canvas');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    canvas.style.border = "3px solid";
+    canvas.style.border = "30px solid grey";
+    canvas.style.margin = "50px auto";
+    canvas.style.display = "block";
+    canvas.style.backgroundColor = "#ddd";
     document.body.appendChild(canvas);
 
     ctx = canvas.getContext('2d');
@@ -49,9 +52,9 @@ window.onload = function()
 //            ctx.fillStyle = "#ff0000";
             ctx.clearRect(0,0,canvas.width, canvas.height);
 
+            drawScore();
             snakee.draw();
             applee.draw();
-            drawScore();
 
             setTimeout(refreshCanvas,delay);
         }
@@ -62,9 +65,21 @@ window.onload = function()
     function gameOver()
     {
         ctx.save();
+        ctx.font = "bold 70px sans-serif";
+        ctx.fillStyle = "black";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 5;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        var centerX = canvasWidth / 2;
+        var centerY = canvasHeight / 2;
 
-        ctx.fillText("Game Over", 5, 15);
-        ctx.fillText("Appuyer sur une touche pour rejouer", 5, 30);
+        ctx.strokeText("Game Over", centerX, centerY - 180);
+        ctx.fillText("Game Over", centerX, centerY - 180);
+
+        ctx.font = "bold 30px sans-serif";
+        ctx.strokeText("Appuyer sur une touche pour rejouer", centerX, centerY - 120);
+        ctx.fillText("Appuyer sur une touche pour rejouer",centerX, centerY - 120);
 
         ctx.restore();
     }
@@ -81,7 +96,13 @@ window.onload = function()
     {
         ctx.save();
 
-        ctx.fillText(score.toString(), 5, canvasHeight - 15 );
+        ctx.font = "bold 200px sans-serif";
+        ctx.fillStyle = "grey";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        var centerX = canvasWidth / 2;
+        var centerY = canvasHeight / 2;
+        ctx.fillText(score.toString(), centerX, centerY );
 
         ctx.restore();
     }
