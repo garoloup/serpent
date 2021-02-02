@@ -10,6 +10,7 @@ window.onload = function()
     var delay = 100; // en ms
     var snakee;
     var applee;
+    var score;
 
     init();
 
@@ -21,12 +22,7 @@ window.onload = function()
     document.body.appendChild(canvas);
 
     ctx = canvas.getContext('2d');
-
-    snakee = new snake([[6,4],[5,4],[4,4],[3,4],[2,4]], "right");
-
-    applee = new apple([10,10]);
-
-    refreshCanvas();
+    restart();
     }
 
     function refreshCanvas() {
@@ -34,12 +30,15 @@ window.onload = function()
         snakee.move();
         if (snakee.checkCollision()) {
             console.log("Game Over");
+            gameOver();
 
         }
         else {
             if (snakee.isEatingApple( applee ))
             {
                 snakee.ateApple = true;
+                score++;
+                drawScore();
                 do
                     {
                         applee.setNewPosition();
@@ -52,12 +51,39 @@ window.onload = function()
 
             snakee.draw();
             applee.draw();
-
+            drawScore();
 
             setTimeout(refreshCanvas,delay);
         }
 
 
+    }
+
+    function gameOver()
+    {
+        ctx.save();
+
+        ctx.fillText("Game Over", 5, 15);
+        ctx.fillText("Appuyer sur une touche pour rejouer", 5, 30);
+
+        ctx.restore();
+    }
+
+    function restart()
+    {
+        score = 0;
+        snakee = new snake([[6,4],[5,4],[4,4],[3,4],[2,4]], "right");
+        applee = new apple([10,10]);
+        refreshCanvas();
+    }
+
+    function drawScore()
+    {
+        ctx.save();
+
+        ctx.fillText(score.toString(), 5, canvasHeight - 15 );
+
+        ctx.restore();
     }
 
     function drawBlock(ctx, pos)
@@ -221,6 +247,9 @@ window.onload = function()
                 case 40:
                     newDir = "down";
                     break;
+                case 32: // space
+                    restart();
+                    return;
                 default:
                     return;
             }
