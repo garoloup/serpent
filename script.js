@@ -11,6 +11,7 @@ window.onload = function()
     var snakee;
     var applee;
     var score;
+    var timerLoop;
 
     init();
 
@@ -56,7 +57,7 @@ window.onload = function()
             snakee.draw();
             applee.draw();
 
-            setTimeout(refreshCanvas,delay);
+            timerLoop = setTimeout(refreshCanvas,delay);
         }
 
 
@@ -89,6 +90,7 @@ window.onload = function()
         score = 0;
         snakee = new snake([[6,4],[5,4],[4,4],[3,4],[2,4]], "right");
         applee = new apple([10,10]);
+        clearTimeout(timerLoop);
         refreshCanvas();
     }
 
